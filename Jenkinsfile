@@ -19,16 +19,6 @@ pipeline{
                  } 
         }
 
-        stage('SonarQube analysis'){
-             environment{
-                 scannerHome = tool 'saidemy-sonar-scanner' 
-                        }
-            steps{
-                withSonarQubeEnv('saidemy-sonarqube-server'){
-                                                         sh "${scannerHome}/bin/sonar-scanner"
-                                                            }
-            }
-        }
         stage("Quality Gate"){
             steps{ 
               script{ 
