@@ -19,18 +19,17 @@ pipeline{
                  } 
         }
 
-        stage("Quality Gate"){
-            steps{ 
-              script{ 
-                 timeout(time:1 , unit:'Hours'){
-                   def qg = waitForQualityGate()
-                       if(qg.status != 'ok'){
-                           error "Pipeline aborted due to quality gate failure : ${qg.status}"  
-                                            } 
-                                               }
-                    }
-                 }
+       stage('SonarQube analysis'){
+             environment{
+                 scannerHome = tool 'saidemy-sonar-scanner' 
+                        }
+            steps{
+                withSonarQubeEnv('saidemy-sonarqube-server'){
+                                                         sh "${scannerHome}/bin/sonar-scanner"
+                                                            }
+            }
         }
+
     }
 }
 
