@@ -1,3 +1,4 @@
+def registry = 'https://trialhcymh4.jfrog.io' // JFROG URL 
 pipeline{
     agent any
     environment{
@@ -36,7 +37,7 @@ pipeline{
                       echo '<...Jar publish started:...>'
                       def server = Artifactory.newServer url: registry + "/artifactory", credentialsId: "artifact-cred" 
                       def properties = "buildid=${env.BUILD_ID}, commitid=${GIT_COMMIT}" 
-                      def uploadSpec = " " "{
+                      def uploadSpec = """{
                               "files": [
                                {
                                 "pattern": "jarstaging/(*)",
@@ -46,7 +47,7 @@ pipeline{
                                 "exclusions": ["*.sha1", "*.md5"]
                                 }
                                        ]
-                                            }" " "
+                                            }"""
                        def buildInfo = server.upload(uploadSpec)
                        buildInfo.env.collect()
                        server.publishBuildInfo(buildInfo)
